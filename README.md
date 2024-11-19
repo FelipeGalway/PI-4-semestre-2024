@@ -5,18 +5,18 @@ PI 4 semestre fatec 2024, projeto para portfolio do curso DSM FATEC
 
 ## Passos para iniciar o projeto iniciar as 3 pastas
 Pasta: [text](sensor_estatisticas_api)
-Run: npm i
+Run: npm i   
 Run: npm start
 
 [text](user_login_api)
-Run: npm i
+Run: npm i   
 Run: npm start
 
 [text](web_front_react)
-Run: npm i
-Run: npm start
+Run: npm i   
+Run: npm start   
 
-![Demonstração](assets/video.gif)
+![Demonstração](/web_front_react/src/assets/img/video.gif)
 
 
 ---
