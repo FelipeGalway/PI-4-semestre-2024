@@ -1,7 +1,6 @@
 import { CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title, Tooltip } from 'chart.js';
 import React, { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
-import { useNavigate } from 'react-router-dom';
 import './Dashboard.css';
 
 // Configuração do Chart.js
@@ -13,7 +12,7 @@ export default function Dashboard() {
     const [modalVisible, setModalVisible] = useState(false);
     const [modalContent, setModalContent] = useState('');
     const [chartData, setChartData] = useState({ labels: [], datasets: [] });
-    const navigate = useNavigate();
+  //  const navigate = useNavigate();
 
     // Simulação de dados
     const simulateDataFetch = () => {
