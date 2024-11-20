@@ -1,6 +1,15 @@
 # PI-4-semestre-2024
 PI 4 semestre fatec 2024, projeto para portfolio do curso DSM FATEC
 
+### Alunos
+➡️Felipe Ferreira Rezende
+
+➡️Gian Carlo Fava
+
+➡️Silvio Alves da Silva Junior
+
+➡️Kevin de Almeida Brandão
+
 ##  **Aplicação Web com React**
 
 ## Passos para iniciar o projeto iniciar as 3 pastas
