@@ -208,6 +208,21 @@ paths:
                 "500":
                     description: Erro interno do servidor
 
+    /stats/atual:
+        get:
+            summary: Faz a leitura dos dados atuais do sensor
+            tags:
+                - dados brutos
+            responses:
+                "200":
+                    description: Leitura realizada com sucesso
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/NowStats"
+                "500":
+                    description: Erro interno do servidor
+
     /users/register:
         post:
             summary: Registra um novo usuário
@@ -378,6 +393,13 @@ paths:
 
 components:
     schemas:
+        NowStats:
+            type: object
+            properties:
+                temperatura:
+                    type: number
+                umidade:
+                    type: number
         Stats:
             type: object
             properties:
