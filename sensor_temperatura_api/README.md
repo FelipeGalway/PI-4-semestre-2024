@@ -10,7 +10,7 @@ Todas as rotas são prefixadas com: `/api/v1`
 
 Recupera a temperatura e umidade atuais do sensor.
 
-- **URL:** `/sensor/realtime`
+- **URL:** `/sensor/current`
 - **Método:** `GET`
 - **Resposta de Sucesso:**
   - **Código:** 200
