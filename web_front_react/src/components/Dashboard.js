@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import './Dashboard.css';
 
-// Configuração do Chart.js
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 export default function Dashboard() {
@@ -12,9 +11,8 @@ export default function Dashboard() {
     const [modalVisible, setModalVisible] = useState(false);
     const [modalContent, setModalContent] = useState('');
     const [chartData, setChartData] = useState({ labels: [], datasets: [] });
-  //  const navigate = useNavigate();
+    const [generalChartData, setGeneralChartData] = useState({ labels: [], datasets: [] });
 
-    // Simulação de dados
     const simulateDataFetch = () => {
         return new Promise((resolve) => {
             setTimeout(() => {
@@ -33,7 +31,7 @@ export default function Dashboard() {
                 setData(simulatedStats);
                 setLoading(false);
 
-                // Preparar dados do gráfico
+                // Dados do gráfico por categoria
                 setChartData({
                     labels: Array.from({ length: simulatedStats.temperatura.length }, (_, i) => `Dia ${i + 1}`),
                     datasets: [
@@ -53,6 +51,25 @@ export default function Dashboard() {
                         },
                     ],
                 });
+
+                // Dados do gráfico geral
+                setGeneralChartData({
+                    labels: Array.from({ length: simulatedStats.temperatura.length }, (_, i) => `Dia ${i + 1}`),
+                    datasets: [
+                        {
+                            label: 'Temperatura e Umidade',
+                            data: simulatedStats.temperatura.map((temp, index) => ({
+                                x: parseFloat(temp),
+                                y: parseFloat(simulatedStats.umidade[index]),
+                            })),
+                            borderColor: '#4BC0C0',
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            tension: 0.4,
+                            showLine: true,
+                            pointRadius: 5,
+                        },
+                    ],
+                });
             } catch (error) {
                 alert('Erro: Não foi possível carregar os dados simulados.');
                 setLoading(false);
@@ -61,23 +78,6 @@ export default function Dashboard() {
 
         loadData();
     }, []);
-
-    // Textos para os botões
-    const temperatureText = `
-TEMPERATURA:
-A temperatura, no contexto climático, é a medida do calor ou frio na atmosfera de uma determinada região. Ela é um dos principais fatores que influenciam as condições climáticas e os padrões de tempo.
-...
-
-A temperatura é essencial para definir o clima de uma região, como tropical, temperado ou polar.
-`;
-
-    const humidityText = `
-UMIDADE:
-A umidade é a quantidade de vapor d'água no ar, influenciando o clima, a sensação térmica e os padrões de precipitação.
-...
-
-A umidade é essencial para entender o clima, afetando precipitação e a formação de tempestades.
-`;
 
     const openModal = (content) => {
         setModalContent(content);
@@ -109,11 +109,14 @@ A umidade é essencial para entender o clima, afetando precipitação e a forma�
             </div>
 
             <div className="buttons-container">
-                <button className="button" onClick={() => openModal(temperatureText)}>
+                <button className="button" onClick={() => openModal('temperatura')}>
                     🌡️ Temperatura
                 </button>
-                <button className="button" onClick={() => openModal(humidityText)}>
+                <button className="button" onClick={() => openModal('umidade')}>
                     💧 Umidade
+                </button>
+                <button className="button" onClick={() => openModal('geral')}>
+                    📊 Projeções
                 </button>
             </div>
 
@@ -123,10 +126,41 @@ A umidade é essencial para entender o clima, afetando precipitação e a forma�
                         <button className="modal-close" onClick={closeModal}>
                             ❌
                         </button>
-                        <h2 className="modal-title">{modalContent.includes('TEMPERATURA') ? 'Temperatura' : 'Umidade'}</h2>
-                        <p className="modal-text">{modalContent}</p>
-                        <div className="chart-container">
-                            <Line data={chartData} />
+                        <h2 className="modal-title">
+                            {modalContent === 'temperatura' ? 'Temperatura' : modalContent === 'umidade' ? 'Umidade' : 'Gráfico Geral'}
+                        </h2>
+                        <div className="modal-content">
+                            {modalContent === 'temperatura' && (
+                                <Line data={chartData} />
+                            )}
+                            {modalContent === 'umidade' && (
+                                <Line data={chartData} />
+                            )}
+                            {modalContent === 'geral' && (
+                                <Line
+                                    data={{
+                                        labels: generalChartData.labels,
+                                        datasets: generalChartData.datasets,
+                                    }}
+                                    options={{
+                                        scales: {
+                                            x: {
+                                                type: 'linear',
+                                                title: {
+                                                    display: true,
+                                                    text: 'Temperatura (°C)',
+                                                },
+                                            },
+                                            y: {
+                                                title: {
+                                                    display: true,
+                                                    text: 'Umidade (%)',
+                                                },
+                                            },
+                                        },
+                                    }}
+                                />
+                            )}
                         </div>
                     </div>
                 </div>
