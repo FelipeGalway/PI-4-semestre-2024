@@ -1,5 +1,6 @@
 const { Model, DataTypes } = require("sequelize");
 const sequelize = require("../../../config/database");
+const moment = require("moment-timezone");
 
 class SensorDHT11 extends Model {}
 
@@ -13,6 +14,12 @@ SensorDHT11.init(
 		data_hora: {
 			type: DataTypes.DATE,
 			defaultValue: DataTypes.NOW,
+			get() {
+				// Garante que a data seja retornada no fuso horário correto
+				return moment(this.getDataValue("data_hora"))
+					.tz("America/Sao_Paulo")
+					.format();
+			},
 		},
 		temperatura: {
 			type: DataTypes.DECIMAL(5, 2),

@@ -2,6 +2,7 @@ const sensor = require("node-dht-sensor");
 const { Op } = require("sequelize");
 const SensorDHT11 = require("../models/sensorDHT11");
 const environment = require("../../../config/environment");
+const moment = require("moment-timezone");
 
 function readSensor() {
 	return new Promise((resolve, reject) => {
@@ -40,15 +41,18 @@ async function getSensorData(startDate, endDate) {
 
 	if (startDate && endDate) {
 		whereClause.data_hora = {
-			[Op.between]: [new Date(startDate), new Date(endDate)],
+			[Op.between]: [
+				moment.tz(startDate, "America/Sao_Paulo").toDate(),
+				moment.tz(endDate, "America/Sao_Paulo").toDate(),
+			],
 		};
 	} else if (startDate) {
 		whereClause.data_hora = {
-			[Op.gte]: new Date(startDate),
+			[Op.gte]: moment.tz(startDate, "America/Sao_Paulo").toDate(),
 		};
 	} else if (endDate) {
 		whereClause.data_hora = {
-			[Op.lte]: new Date(endDate),
+			[Op.lte]: moment.tz(endDate, "America/Sao_Paulo").toDate(),
 		};
 	}
 

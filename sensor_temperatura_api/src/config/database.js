@@ -16,6 +16,12 @@ const sequelize = new Sequelize(
 			acquire: 30000,
 			idle: 10000,
 		},
+		timezone: "-03:00", // Define o fuso horário para -03:00
+		dialectOptions: {
+			useUTC: false,
+			dateStrings: true,
+			typeCast: true,
+		},
 		// Configurações adicionais do Sequelize
 		define: {
 			timestamps: false, // Desativa timestamps automáticos

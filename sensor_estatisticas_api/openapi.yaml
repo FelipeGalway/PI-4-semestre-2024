@@ -1,0 +1,561 @@
+openapi: 3.0.0
+info:
+    title: API de Análise de Dados de Sensor DHT11 e Gestão de Usuários
+    description: API para gerenciar, consultar e analisar dados do sensor DHT11, bem como autenticar e gerenciar usuários
+    version: 1.0.0
+
+servers:
+    - url: http://localhost:3001/api/v1
+      description: Servidor de desenvolvimento
+
+tags:
+    - name: estatísticas
+      description: Operações relacionadas às estatísticas dos dados do sensor
+    - name: dados brutos
+      description: Operações relacionadas aos dados brutos do sensor
+    - name: autenticação
+      description: Operações relacionadas à autenticação de usuários
+    - name: usuários
+      description: Operações relacionadas à gestão de usuários
+
+paths:
+    /stats/temperatura:
+        get:
+            summary: Recupera estatísticas de temperatura
+            tags:
+                - estatísticas
+            parameters:
+                - in: query
+                  name: startDate
+                  schema:
+                      type: string
+                      format: date-time
+                  description: Data de início para filtrar os dados (formato ISO8601)
+                - in: query
+                  name: endDate
+                  schema:
+                      type: string
+                      format: date-time
+                  description: Data de fim para filtrar os dados (formato ISO8601)
+            responses:
+                "200":
+                    description: Estatísticas de temperatura recuperadas com sucesso
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/TemperatureStats"
+                "500":
+                    description: Erro interno do servidor
+
+    /stats/umidade:
+        get:
+            summary: Recupera estatísticas de umidade
+            tags:
+                - estatísticas
+            parameters:
+                - in: query
+                  name: startDate
+                  schema:
+                      type: string
+                      format: date-time
+                  description: Data de início para filtrar os dados (formato ISO8601)
+                - in: query
+                  name: endDate
+                  schema:
+                      type: string
+                      format: date-time
+                  description: Data de fim para filtrar os dados (formato ISO8601)
+            responses:
+                "200":
+                    description: Estatísticas de umidade recuperadas com sucesso
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/HumidityStats"
+                "500":
+                    description: Erro interno do servidor
+
+    /stats/geral:
+        get:
+            summary: Recupera estatísticas gerais (temperatura e umidade)
+            tags:
+                - estatísticas
+            parameters:
+                - in: query
+                  name: startDate
+                  schema:
+                      type: string
+                      format: date-time
+                  description: Data de início para filtrar os dados (formato ISO8601)
+                - in: query
+                  name: endDate
+                  schema:
+                      type: string
+                      format: date-time
+                  description: Data de fim para filtrar os dados (formato ISO8601)
+            responses:
+                "200":
+                    description: Estatísticas gerais recuperadas com sucesso
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/GeneralStats"
+                "500":
+                    description: Erro interno do servidor
+
+    /stats/ultimo-dia:
+        get:
+            summary: Recupera estatísticas do último dia
+            tags:
+                - estatísticas
+            responses:
+                "200":
+                    description: Estatísticas do último dia recuperadas com sucesso
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/LastDayStats"
+                "500":
+                    description: Erro interno do servidor
+
+    /stats/temperatura/stats-diarias:
+        get:
+            summary: Recupera estatísticas diárias de temperatura
+            tags:
+                - estatísticas
+            parameters:
+                - in: query
+                  name: startDate
+                  schema:
+                      type: string
+                      format: date-time
+                  description: Data de início para filtrar os dados (formato ISO8601)
+                - in: query
+                  name: endDate
+                  schema:
+                      type: string
+                      format: date-time
+                  description: Data de fim para filtrar os dados (formato ISO8601)
+            responses:
+                "200":
+                    description: Estatísticas diárias de temperatura recuperadas com sucesso
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: "#/components/schemas/DailyStats"
+                "500":
+                    description: Erro interno do servidor
+
+    /stats/umidade/stats-diarias:
+        get:
+            summary: Recupera estatísticas diárias de umidade
+            tags:
+                - estatísticas
+            parameters:
+                - in: query
+                  name: startDate
+                  schema:
+                      type: string
+                      format: date-time
+                  description: Data de início para filtrar os dados (formato ISO8601)
+                - in: query
+                  name: endDate
+                  schema:
+                      type: string
+                      format: date-time
+                  description: Data de fim para filtrar os dados (formato ISO8601)
+            responses:
+                "200":
+                    description: Estatísticas diárias de umidade recuperadas com sucesso
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: "#/components/schemas/DailyStats"
+                "500":
+                    description: Erro interno do servidor
+
+    /stats/dados-brutos:
+        get:
+            summary: Recupera dados brutos do sensor
+            tags:
+                - dados brutos
+            parameters:
+                - in: query
+                  name: startDate
+                  schema:
+                      type: string
+                      format: date-time
+                  description: Data de início para filtrar os dados (formato ISO8601)
+                - in: query
+                  name: endDate
+                  schema:
+                      type: string
+                      format: date-time
+                  description: Data de fim para filtrar os dados (formato ISO8601)
+            responses:
+                "200":
+                    description: Dados brutos recuperados com sucesso
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: "#/components/schemas/SensorData"
+                "500":
+                    description: Erro interno do servidor
+
+    /stats/atual:
+        get:
+            summary: Faz a leitura dos dados atuais do sensor
+            tags:
+                - dados brutos
+            responses:
+                "200":
+                    description: Leitura realizada com sucesso
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/NowStats"
+                "500":
+                    description: Erro interno do servidor
+
+    /users/register:
+        post:
+            summary: Registra um novo usuário
+            tags:
+                - autenticação
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/UserRegistration"
+            responses:
+                "201":
+                    description: Usuário registrado com sucesso
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/RegistrationResponse"
+                "400":
+                    description: Dados inválidos ou email já cadastrado
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ErrorResponse"
+
+    /users/login:
+        post:
+            summary: Autentica um usuário
+            tags:
+                - autenticação
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/UserLogin"
+            responses:
+                "200":
+                    description: Login bem-sucedido
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/LoginResponse"
+                "400":
+                    description: Credenciais inválidas
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ErrorResponse"
+
+    /users:
+        get:
+            summary: Lista todos os usuários
+            tags:
+                - usuários
+            security:
+                - BearerAuth: []
+            responses:
+                "200":
+                    description: Lista de usuários recuperada com sucesso
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: "#/components/schemas/User"
+                "401":
+                    $ref: "#/components/responses/UnauthorizedError"
+
+    /users/{id}:
+        get:
+            summary: Obtém um usuário específico
+            tags:
+                - usuários
+            security:
+                - BearerAuth: []
+            parameters:
+                - in: path
+                  name: id
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                "200":
+                    description: Usuário encontrado
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/User"
+                "404":
+                    description: Usuário não encontrado
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ErrorResponse"
+                "401":
+                    $ref: "#/components/responses/UnauthorizedError"
+
+        put:
+            summary: Atualiza perfil do usuário
+            tags:
+                - usuários
+            security:
+                - BearerAuth: []
+            parameters:
+                - in: path
+                  name: id
+                  required: true
+                  schema:
+                      type: string
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/UserUpdate"
+            responses:
+                "200":
+                    description: Perfil atualizado com sucesso
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/User"
+                "403":
+                    description: Não autorizado a atualizar outro usuário
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ErrorResponse"
+                "404":
+                    description: Usuário não encontrado
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ErrorResponse"
+                "401":
+                    $ref: "#/components/responses/UnauthorizedError"
+
+        delete:
+            summary: Exclui conta do usuário
+            tags:
+                - usuários
+            security:
+                - BearerAuth: []
+            parameters:
+                - in: path
+                  name: id
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                "204":
+                    description: Conta excluída com sucesso
+                "403":
+                    description: Não autorizado a excluir outro usuário
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ErrorResponse"
+                "404":
+                    description: Usuário não encontrado
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ErrorResponse"
+                "401":
+                    $ref: "#/components/responses/UnauthorizedError"
+
+components:
+    schemas:
+        NowStats:
+            type: object
+            properties:
+                temperatura:
+                    type: number
+                umidade:
+                    type: number
+        Stats:
+            type: object
+            properties:
+                media:
+                    type: number
+                mediana:
+                    type: number
+                desvioPadrao:
+                    type: number
+                minimo:
+                    type: number
+                maximo:
+                    type: number
+
+        TemperatureStats:
+            $ref: "#/components/schemas/Stats"
+
+        HumidityStats:
+            $ref: "#/components/schemas/Stats"
+
+        GeneralStats:
+            type: object
+            properties:
+                temperatura:
+                    $ref: "#/components/schemas/Stats"
+                umidade:
+                    $ref: "#/components/schemas/Stats"
+
+        LastDayStats:
+            type: object
+            properties:
+                temperatura:
+                    $ref: "#/components/schemas/Stats"
+                umidade:
+                    $ref: "#/components/schemas/Stats"
+                numeroLeituras:
+                    type: integer
+
+        DailyStats:
+            type: object
+            properties:
+                date:
+                    type: string
+                    format: date
+                media:
+                    type: number
+                mediana:
+                    type: number
+                desvioPadrao:
+                    type: number
+                minimo:
+                    type: number
+                maximo:
+                    type: number
+
+        SensorData:
+            type: object
+            properties:
+                id:
+                    type: integer
+                data_hora:
+                    type: string
+                    format: date-time
+                temperatura:
+                    type: number
+                umidade:
+                    type: number
+
+        UserRegistration:
+            type: object
+            required:
+                - cpf
+                - name
+                - email
+                - password
+            properties:
+                cpf:
+                    type: string
+                name:
+                    type: string
+                email:
+                    type: string
+                    format: email
+                password:
+                    type: string
+                    format: password
+
+        UserLogin:
+            type: object
+            required:
+                - email
+                - password
+            properties:
+                email:
+                    type: string
+                    format: email
+                password:
+                    type: string
+                    format: password
+
+        RegistrationResponse:
+            type: object
+            properties:
+                message:
+                    type: string
+
+        LoginResponse:
+            type: object
+            properties:
+                token:
+                    type: string
+
+        ErrorResponse:
+            type: object
+            properties:
+                message:
+                    type: string
+
+        User:
+            type: object
+            properties:
+                id:
+                    type: string
+                cpf:
+                    type: string
+                name:
+                    type: string
+                email:
+                    type: string
+                    format: email
+
+        UserUpdate:
+            type: object
+            properties:
+                name:
+                    type: string
+                email:
+                    type: string
+                    format: email
+                password:
+                    type: string
+                    format: password
+
+    responses:
+        UnauthorizedError:
+            description: Token de autenticação ausente ou inválido
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/ErrorResponse"
+
+    securitySchemes:
+        BearerAuth:
+            type: http
+            scheme: bearer
+            bearerFormat: JWT
+
+security:
+    - BearerAuth: []

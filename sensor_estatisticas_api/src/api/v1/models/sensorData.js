@@ -1,6 +1,5 @@
-const axios = require("axios");
 const { faker } = require("@faker-js/faker");
-const sensorService = require('../services/sensorService');
+const sensorService = require("../services/sensorService");
 const config = require("../../../config/config");
 
 function generateFakeData(count = 100, startDate, endDate) {

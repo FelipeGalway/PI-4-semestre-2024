@@ -1,17 +1,137 @@
-.dashboard-container {
+/* Contêiner dos botões */
+.buttons-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px; /* Espaço entre os botões */
+    margin-top: 20px;
+    flex-wrap: wrap; /* Para que os botões fiquem alinhados em telas menores */
+}
+
+/* Botões de navegação */
+.button {
+    background-color: #007AFF;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    min-width: 150px; /* Tamanho mínimo para uniformidade */
     text-align: center;
 }
-.dashboard-container p {
-    font-size: 1.2em;
-    margin: 10px 0;
+
+.button:hover {
+    background-color: #005BB5; /* Cor mais escura no hover */
+    transform: scale(1.05); /* Efeito de "crescer" */
+}
+
+.button:active {
+    transform: scale(0.95); /* Reduzido ao clicar */
+    background-color: #003F7F; /* Cor ainda mais escura ao clicar */
+}
+
+/* Estilização do modal */
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    width: 60%;
+    max-width: 500px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    z-index: 1000;
+    text-align: center;
+    overflow: hidden;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.modal-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: #333;
+    padding: 5px;
+    transition: color 0.3s;
+}
+
+.modal-close:hover {
+    color: #ff0000;
+}
+
+.modal-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 15px;
     color: #333;
 }
-.dashboard-container .data {
-    font-weight: bold;
-    color: #4caf50;
+
+.modal-content {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.5;
+    text-align: left;
 }
-.dashboard-container .refresh-info {
-    font-size: 0.8em;
-    color: #666;
-    margin-top: 10px;
+
+.modal-chart {
+    margin-top: 20px;
+    width: 100%;
+    height: 200px;
+}
+.simulation-container {
+    text-align: center;
+    margin-bottom: 20px;
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.simulation-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.simulation-container p {
+    font-size: 1rem;
+    color: #555;
+    margin: 5px 0;
+}
+
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.dashboard-title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+    margin-top: 20px; /* Ajuste de margem superior */
+    margin-bottom: 40px; /* Espaçamento abaixo do título */
+    color: #333;
+    align-self: center;
 }
